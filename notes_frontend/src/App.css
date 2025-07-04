@@ -1,0 +1,118 @@
+/* Theme Variables */
+:root {
+  --primary: #1976D2;
+  --secondary: #424242;
+  --accent: #FFC107;
+  --sidebar-bg: #fff;
+  --main-bg: #f8f9fa;
+  --text-main: #282c34;
+  --text-muted: #888888;
+  --note-border: #1976D233;
+}
+[data-theme="dark"] {
+  --primary: #1a60ac;
+  --secondary: #222;
+  --sidebar-bg: #252835;
+  --main-bg: #181b2b;
+  --text-main: #f7f7f7;
+  --text-muted: #bdbdbd;
+  --note-border: #1976d266;
+}
+body {
+  margin: 0;
+  font-family: Inter, "Segoe UI", Arial, sans-serif;
+  background: var(--main-bg);
+  color: var(--text-main);
+}
+
+/* Hide number spinner arrows for input fields */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type="number"] {
+  -moz-appearance: textfield; /* Firefox */
+}
+
+/* General App Layout */
+.App {
+  text-align: left;
+  background-color: var(--main-bg);
+  color: var(--text-main);
+  min-height: 100vh;
+  transition: background-color 0.3s, color 0.3s;
+  display: flex;
+  flex-direction: column;
+}
+nav {
+  user-select: none;
+}
+.sidebar-note:focus-visible {
+  outline: 2px solid var(--primary);
+}
+.sidebar-note[aria-current="true"] {
+  background: var(--primary);
+  color: #fff !important;
+}
+::-webkit-scrollbar {
+  width: 7px; background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #eee;
+  border-radius: 8px;
+}
+@media (max-width: 860px) {
+  aside {
+    width: 155px !important; min-width: 120px !important;
+  }
+}
+@media (max-width: 640px) {
+  nav {
+    font-size: 16px !important;
+  }
+  aside {
+    width: 0 !important; min-width: 0 !important; overflow: hidden !important;
+  }
+  main {
+    padding: 0 !important;
+  }
+}
+/* Editor inputs/titles/buttons standard */
+input, textarea {
+  font-family: inherit;
+  font-size: 1rem;
+  border: 1px solid var(--note-border);
+  border-radius: 6px;
+  padding: 8px 10px;
+  color: var(--secondary);
+  margin-bottom: 6px;
+  background: #fff;
+  transition: box-shadow 0.16s, border-color 0.16s;
+}
+input:focus, textarea:focus {
+  outline: 2px solid var(--primary);
+  border-color: var(--primary);
+  background: #f1f6ff;
+}
+textarea {
+  width: 100%;
+}
+button {
+  font-family: inherit;
+  outline: none;
+  transition: background 0.16s, color 0.13s, box-shadow 0.12s;
+}
+button:active {
+  opacity: 0.85;
+}
+footer {
+  user-select: none;
+}
+
+ul {
+  padding-left: 0;
+}
+li {
+  list-style-type: none;
+}
