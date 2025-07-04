@@ -21,7 +21,14 @@
 body {
   margin: 0;
   font-family: Inter, "Segoe UI", Arial, sans-serif;
-  background: var(--main-bg);
+  /* Modern, soft linear gradient using primary/accent and light tones */
+  background: linear-gradient(
+    123deg,
+    #f8fafc 0%,
+    #f6f9fe 35%,
+    #e3edfa 65%,
+    #fffbe6 100%
+  );
   color: var(--text-main);
 }
 
