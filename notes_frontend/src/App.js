@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import './App.css';
+import { BrowserRouter as Router, Routes, Route, Link, useNavigate, useLocation } from "react-router-dom";
+import SettingsPage from './SettingsPage';
 
 /**
  * Notes Frontend App
@@ -9,6 +11,10 @@ import './App.css';
  * - Responsive design, custom theming via CSS variables, in-localStorage persistence
  */
 
+/**
+ * Main Notes App
+ * Adds routing for Settings page and updates the top navigation.
+ */
 // PUBLIC_INTERFACE
 function App() {
   // --- Main App State ---
@@ -162,6 +168,9 @@ function App() {
 
   // PUBLIC_INTERFACE
   function Navbar() {
+    const location = useLocation();
+    const isNotes = location.pathname === "/" || location.pathname === "/notes";
+    const isSettings = location.pathname === "/settings";
     return (
       <nav style={{
         background: COLORS.primary,
@@ -178,8 +187,53 @@ function App() {
           fontWeight: 800,
           fontSize: 20,
           letterSpacing: '1px'
-        }}>Notemaster</span>
-        <div>
+        }}>
+          <Link
+            to="/"
+            style={{
+              color: '#fff',
+              textDecoration: 'none',
+            }}
+          >Notemaster</Link>
+        </span>
+        <div style={{
+          display: "flex",
+          alignItems: "center",
+          gap: 1
+        }}>
+          <Link
+            to="/"
+            style={{
+              textDecoration: 'none',
+              background: isNotes ? '#fff2' : 'transparent',
+              color: '#fff',
+              borderRadius: 5,
+              padding: "7px 13px",
+              marginRight: 2,
+              fontWeight: isNotes ? 700 : 500,
+              fontSize: 15,
+              letterSpacing: '0.5px',
+              transition: 'background 0.21s'
+            }}
+            aria-current={isNotes ? "page" : undefined}
+          >Notes</Link>
+          <Link
+            to="/settings"
+            style={{
+              textDecoration: 'none',
+              background: isSettings ? '#fff2' : 'transparent',
+              color: '#fff',
+              borderRadius: 5,
+              padding: "7px 13px",
+              marginLeft: 2,
+              marginRight: 16,
+              fontWeight: isSettings ? 700 : 500,
+              fontSize: 15,
+              letterSpacing: '0.5px',
+              transition: 'background 0.21s'
+            }}
+            aria-current={isSettings ? "page" : undefined}
+          >Settings</Link>
           <button
             onClick={toggleTheme}
             style={{
@@ -187,7 +241,7 @@ function App() {
               color: '#fff',
               border: 'none',
               borderRadius: 6,
-              padding: '7px 16px',
+              padding: '7px 13px',
               cursor: 'pointer',
               fontWeight: 500,
               fontSize: 15,
@@ -204,7 +258,7 @@ function App() {
               color: COLORS.secondary,
               border: 'none',
               borderRadius: 6,
-              padding: '7px 16px',
+              padding: '7px 14px',
               cursor: 'pointer',
               fontWeight: 500,
               fontSize: 15
@@ -456,88 +510,103 @@ function App() {
 
   // --- Responsive Layout ---
   return (
-    <div style={{
-      background: COLORS.lightBackground,
-      minHeight: '100vh',
-      display: 'flex',
-      flexDirection: 'column',
-      fontFamily: '"Inter","Segoe UI",Arial,sans-serif'
-    }}>
-      <Navbar />
-      {/* Layout: Sidebar + Main Panel */}
+    <Router>
       <div style={{
+        background: COLORS.lightBackground,
+        minHeight: '100vh',
         display: 'flex',
-        flex: 1,
-        minHeight: 'calc(100vh - 56px)',
-        overflow: 'hidden'
+        flexDirection: 'column',
+        fontFamily: '"Inter","Segoe UI",Arial,sans-serif'
       }}>
-        {/* Responsive Sidebar */}
-        <div
-          style={{
-            minWidth: isSidebarOpen ? 250 : 0,
-            width: isSidebarOpen ? 260 : 0,
-            transition: 'width 0.22s',
-            overflow: isSidebarOpen ? 'auto' : 'hidden',
-            background: '#fff',
-            borderRight: isSidebarOpen ? `1px solid ${COLORS.primary}22` : 'none',
-            position: 'relative'
-          }}
-        >
-          {/* Collapse/Expand Sidebar Toggle */}
-          <button
-            title={isSidebarOpen ? "Collapse sidebar" : "Expand sidebar"}
-            style={{
-              position: 'absolute',
-              right: -19,
-              top: 50,
-              width: 28,
-              height: 28,
-              background: COLORS.primary,
-              color: '#fff',
-              border: 'none',
-              borderRadius: '50%',
-              cursor: 'pointer',
-              display: window.innerWidth < 640 ? 'block' : 'none',
-              zIndex: 2,
-              fontSize: 17,
-              boxShadow: '0 2px 8px rgb(0 0 0 / 10%)'
-            }}
-            onClick={handleSidebarCollapse}
-          >
-            {isSidebarOpen ? '←' : '→'}
-          </button>
-          {isSidebarOpen && <Sidebar />}
-        </div>
-        {/* Main Editor/View Panel */}
-        <main
-          style={{
-            flex: 1,
-            minHeight: 0,
-            background: COLORS.lightBackground,
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'start'
-          }}
-        >
-          <EditorPanel />
-        </main>
+        <Navbar />
+        <Routes>
+          <Route
+            path="/"
+            element={
+              // Notes app original layout
+              <div style={{
+                display: 'flex',
+                flex: 1,
+                minHeight: 'calc(100vh - 56px)',
+                overflow: 'hidden'
+              }}>
+                {/* Responsive Sidebar */}
+                <div
+                  style={{
+                    minWidth: isSidebarOpen ? 250 : 0,
+                    width: isSidebarOpen ? 260 : 0,
+                    transition: 'width 0.22s',
+                    overflow: isSidebarOpen ? 'auto' : 'hidden',
+                    background: '#fff',
+                    borderRight: isSidebarOpen ? `1px solid ${COLORS.primary}22` : 'none',
+                    position: 'relative'
+                  }}
+                >
+                  {/* Collapse/Expand Sidebar Toggle */}
+                  <button
+                    title={isSidebarOpen ? "Collapse sidebar" : "Expand sidebar"}
+                    style={{
+                      position: 'absolute',
+                      right: -19,
+                      top: 50,
+                      width: 28,
+                      height: 28,
+                      background: COLORS.primary,
+                      color: '#fff',
+                      border: 'none',
+                      borderRadius: '50%',
+                      cursor: 'pointer',
+                      display: window.innerWidth < 640 ? 'block' : 'none',
+                      zIndex: 2,
+                      fontSize: 17,
+                      boxShadow: '0 2px 8px rgb(0 0 0 / 10%)'
+                    }}
+                    onClick={handleSidebarCollapse}
+                  >
+                    {isSidebarOpen ? '←' : '→'}
+                  </button>
+                  {isSidebarOpen && <Sidebar />}
+                </div>
+                {/* Main Editor/View Panel */}
+                <main
+                  style={{
+                    flex: 1,
+                    minHeight: 0,
+                    background: COLORS.lightBackground,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'start'
+                  }}
+                >
+                  <EditorPanel />
+                </main>
+              </div>
+            }
+          />
+          <Route
+            path="/settings"
+            element={
+              <SettingsPage theme={theme} onToggleTheme={toggleTheme} />
+            }
+          />
+        </Routes>
+        {/* Minimalist Footer */}
+        <footer style={{
+          height: 38,
+          padding: 0,
+          fontSize: 14,
+          color: COLORS.secondary,
+          background: '#fff',
+          borderTop: `1px solid ${COLORS.primary}11`,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          opacity: 0.66
+        }}>
+          &copy; {new Date().getFullYear()} Notemaster &middot; Minimal Notes App
+        </footer>
       </div>
-      {/* Minimalist Footer */}
-      <footer style={{
-        height: 38,
-        padding: 0,
-        fontSize: 14,
-        color: COLORS.secondary,
-        background: '#fff',
-        borderTop: `1px solid ${COLORS.primary}11`,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        opacity: 0.66
-      }}>
-        &copy; {new Date().getFullYear()} Notemaster &middot; Minimal Notes App
-      </footer>
-    </div>
+    </Router>
   );
 }
 
